@@ -1,4 +1,3 @@
-from associations import products_to_orders_association_table
 from app import db
 
 class Product(db.Model):
@@ -11,10 +10,12 @@ class Product(db.Model):
     description = db.Column(db.Text)
     company_id = db.Column(db.Integer, db.ForeignKey('companies.id'))
     company = db.relationship("Company", back_populates="products")
+    orders = db.relationship("LineItem", back_populates="product")
 
-    def __init__(self, name, description):
+    def __init__(self, name, description, company):
         self.name = name
         self.description = description
+        self.company = company
 
     def __repr__(self):
         """Display when printing a Product object"""

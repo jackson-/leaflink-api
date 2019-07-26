@@ -27,12 +27,16 @@ def route_company_get_by_id(company_id):
     {
         "name": fields.Str(),
         "description": fields.Str(),
+        "company_type": fields.Str(),
     }
 )
-def route_company_create(name, description):
+def route_company_create(name, description, company_type):
+    if company_type.lower() not in ["buyer", "seller"]:
+        return abort(400, "{0} is not a valid company type. Please choose buyer or seller.".format(company_type))
     company = Company(
         name=name,
         description=description,
+        company_type=company_type,
     )
     db.session.add(company)
     db.session.commit()
@@ -49,8 +53,8 @@ def route_company_create(name, description):
         "description": fields.Str(),
     }
 )
-def route_company_update(**kwargs):
-    company = Company.query.filter(Company.id == kwargs['company_id']).first()
+def route_company_update(company_id, **kwargs):
+    company = Company.query.filter(Company.id == company_id).first()
     for key, val in kwargs.items():
         if val is not None:
             setattr(company, key, val)
