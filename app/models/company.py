@@ -1,8 +1,4 @@
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
-
-from db import db
+from app import db
 
 class Company(db.Model):
     """A Company class"""
@@ -14,10 +10,6 @@ class Company(db.Model):
     description = db.Column(db.Text)
     products = db.relationship("Product", back_populates="company")
 
-    def __init__(self, name, description, products):
-        self.name = name
-        self.description = description
-        self.products = products 
 
     def __repr__(self):
         """Display when printing a Company object"""

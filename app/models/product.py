@@ -1,8 +1,5 @@
-from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
 from associations import products_to_orders_association_table
-
-from db import db
+from app import db
 
 class Product(db.Model):
     """A Product class"""

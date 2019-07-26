@@ -1,10 +1,5 @@
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
 from associations import products_to_orders_association_table
-
-from db import db
-Base = declarative_base()
+from app import db
 
 
 class Order(db.Model):

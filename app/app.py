@@ -1,34 +1,23 @@
-from flask import Flask, request, abort
-from flask_restful import Resource, Api, reqparse, fields, marshal_with
-from flask_apispec import doc, use_kwargs, marshal_with
-from flask.json import jsonify
+from flask import Flask
+from os import path
+from flask_sqlalchemy import SQLAlchemy
 
-from models import Company, db, connect_to_db
-from schemas.company import CompanySchema
 
 app = Flask(__name__)
+basedir = path.abspath(path.dirname(__file__))
+# Database
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql:///leaflink_dev"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# Init DB
+db = SQLAlchemy(app)
+db.app = app
+db.init_app(app)
+db.create_all()
 
-
-#####################################################
-#                Add resources to API               #
-#####################################################
-# api.add_resource(CompanyView,
-#                  '/company/',
-#                  '/company/<int:company_id>')
-
-# Get all
-# @docs.register
-# @doc(description="Retrieve all companies", security=security_params, tags=["companies"])
-@marshal_with(CompanySchema(many=True))
-@app.route("/", methods=["GET"])
-def route_company_get_all():
-    companies = Company.query.all()
-    return jsonify({'companies': companies})
+from api import *
 
 #####################################################
 #                      Run App                      #
 #####################################################
 if __name__ == '__main__':
-
-    connect_to_db(app)
     app.run(port=5000, host='0.0.0.0', debug=True)
